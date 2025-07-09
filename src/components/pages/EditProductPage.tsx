@@ -31,7 +31,6 @@ export default function EditProductPage(props: Props) {
     useEffect(() => {
         async function run() {
             if (!id) {
-                props.setErrorMessage('product id is undefined');
                 return;
             }
             

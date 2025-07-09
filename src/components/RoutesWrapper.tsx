@@ -1,0 +1,83 @@
+import { Route, Routes, useNavigate } from 'react-router-dom'
+import HomePage from './pages/HomePage'
+import EditProductPage from './pages/EditProductPage'
+import ProductPage from './pages/ProductPage'
+import Navbar from './Navbar'
+import s from '../less/app.module.less'
+import AuthPage from './pages/AuthPage'
+import ErrorPage from './pages/ErrorPage'
+import ErrorBar from './ErrorBar'
+import { useEffect, useState } from 'react'
+import RedirectListener from './RedirectListener'
+import type { User } from '../types/User'
+import PageNotFoundPage from './pages/PageNotFoundPage'
+import ProtectedRoute from './ProtectedRoute'
+import { LOCAL_STORAGE_AUTH_TOKEN } from '../constants'
+import { getUserDetails } from '../api/auth'
+
+export default function RoutesWrapper() {
+  const [errorMessage, setErrorMessage] = useState<string>('');
+  const [user, setUser] = useState<User | undefined>();
+  
+  const navigate = useNavigate();
+  
+  useEffect(() => {
+      async function tryAutologin() {
+          if (user) {
+              return;
+          }
+          
+          const token = localStorage.getItem(LOCAL_STORAGE_AUTH_TOKEN);
+      
+          if (!token) {
+              return;
+          }
+          
+          try {
+              setUser(await getUserDetails(token));
+          } catch (e) {
+              if (e instanceof Error) {
+                navigate('/login');
+              }
+          }
+      }
+   
+      tryAutologin();
+  }, []);
+  
+  return (
+    <div className={s.component}>
+        <RedirectListener setErrorMessage={setErrorMessage} />
+        <Navbar setErrorMessage={setErrorMessage} user={user} />
+        
+        {errorMessage &&
+            <ErrorBar errorMessage={errorMessage} />
+        }
+        
+        <div className={s.page}>
+            <Routes>
+            {/* public */}
+            <Route path="/" element={<HomePage setErrorMessage={setErrorMessage} />} />
+            <Route path="/product/:id" element={<ProductPage setErrorMessage={setErrorMessage} user={user} />} />
+            <Route path="/login" element={<AuthPage setErrorMessage={setErrorMessage} setUser={setUser} isLoginPage={true} />} />
+            <Route path="/register" element={<AuthPage setErrorMessage={setErrorMessage} setUser={setUser} isLoginPage={false} />} />
+            <Route path="/error" element={<ErrorPage />} />
+            <Route path="*" element={<PageNotFoundPage />} />
+            
+            {/* protected */}
+            <Route path="/update/:id" element={
+                <ProtectedRoute user={user}>
+                <EditProductPage setErrorMessage={setErrorMessage} />
+                </ProtectedRoute>
+            } />
+            
+            <Route path="/add_product" element={
+                <ProtectedRoute user={user}>
+                <EditProductPage setErrorMessage={setErrorMessage} />
+                </ProtectedRoute>
+            } />
+            </Routes>
+        </div>
+    </div>
+  )
+}

@@ -2,6 +2,7 @@ import s from '../../less/auth.module.less'
 import * as authApi from '../../api/auth'
 import type { User } from '../../types/User';
 import { useNavigate } from 'react-router-dom';
+import { LOCAL_STORAGE_AUTH_TOKEN } from '../../constants';
 
 interface Props {
   setErrorMessage: React.Dispatch<React.SetStateAction<string>>;
@@ -60,6 +61,8 @@ export default function AuthPage(props: Props) {
           
         const user = await authApi.getUserDetails(jwtResp.token);
         props.setUser(user);
+        
+        localStorage.setItem(LOCAL_STORAGE_AUTH_TOKEN, jwtResp.token);
         
         props.setErrorMessage('');
       } catch (e) {

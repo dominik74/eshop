@@ -4,6 +4,7 @@ import * as prodApi from "../api/products";
 import { useEffect, useRef, useState } from "react";
 import type { Product } from "../types/Product";
 import type { User } from "../types/User";
+import { LOCAL_STORAGE_AUTH_TOKEN } from "../constants";
 
 interface Props {
     setErrorMessage: React.Dispatch<React.SetStateAction<string>>;
@@ -88,6 +89,11 @@ export default function Navbar(props: Props) {
         setSelectedSuggestionIdx(0);
     }
     
+    function logout() {
+        localStorage.removeItem(LOCAL_STORAGE_AUTH_TOKEN);
+        window.location.reload();
+    }
+    
     return (
         <div className={s.component}>
             <nav>
@@ -96,6 +102,11 @@ export default function Navbar(props: Props) {
                 <Link to="/login">login</Link>
                 <div className={s.right}>
                     <span>{props.user?.username}</span>
+                    
+                    {props.user &&
+                        <button onClick={logout}>log out</button>
+                    }
+                    
                     <div className={s.searchbox}>
                         <input
                             type="text"

@@ -11,6 +11,7 @@ import { useState } from 'react'
 import RedirectListener from './components/RedirectListener'
 import type { User } from './types/User'
 import PageNotFoundPage from './components/pages/PageNotFoundPage'
+import ProtectedRoute from './components/ProtectedRoute'
 
 function App() {
   const [errorMessage, setErrorMessage] = useState<string>('');
@@ -28,14 +29,26 @@ function App() {
         
         <div className={s.page}>
           <Routes>
+            {/* public */}
             <Route path="/" element={<HomePage setErrorMessage={setErrorMessage} />} />
-            <Route path="/add_product" element={<EditProductPage setErrorMessage={setErrorMessage} />} />
             <Route path="/product/:id" element={<ProductPage setErrorMessage={setErrorMessage} user={user} />} />
-            <Route path="/update/:id" element={<EditProductPage setErrorMessage={setErrorMessage} />} />
             <Route path="/login" element={<AuthPage setErrorMessage={setErrorMessage} setUser={setUser} isLoginPage={true} />} />
             <Route path="/register" element={<AuthPage setErrorMessage={setErrorMessage} setUser={setUser} isLoginPage={false} />} />
             <Route path="/error" element={<ErrorPage />} />
             <Route path="*" element={<PageNotFoundPage />} />
+            
+            {/* protected */}
+            <Route path="/update/:id" element={
+              <ProtectedRoute user={user}>
+                <EditProductPage setErrorMessage={setErrorMessage} />
+              </ProtectedRoute>
+            } />
+            
+            <Route path="/add_product" element={
+              <ProtectedRoute user={user}>
+                <EditProductPage setErrorMessage={setErrorMessage} />
+              </ProtectedRoute>
+            } />
           </Routes>
         </div>
       </BrowserRouter>

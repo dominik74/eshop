@@ -101,12 +101,16 @@ export default function Navbar(props: Props) {
                 <Link to="/add_product">add product</Link>
                 <Link to="/login">login</Link>
                 <div className={s.right}>
-                    <span>{props.user?.username}</span>
+                    <span>
+                        {props.user?.username}
+                        {props.user?.admin &&
+                            ' (admin)'
+                        }
+                    </span>
                     
                     {props.user &&
                         <button onClick={logout}>log out</button>
                     }
-                    
                     <div className={s.searchbox}>
                         <input
                             type="text"

@@ -1,0 +1,77 @@
+.component {
+    nav {
+        background-color: black;
+        color: white;
+        text-decoration: none;
+        height: 40px;
+        
+        > a {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            
+            text-decoration: none;
+            padding: 0 10px;
+            height: 100%;
+            
+            &:visited {
+                color: white;
+            }
+            
+            &:hover {
+                background-color: gray;
+            }
+        }
+        
+        .right {
+            display: flex;
+            align-items: center;
+            height: 100%;
+            float: right;
+            
+            > .searchbox {
+                position: relative;
+                
+                > .suggestions {
+                    position: absolute;
+                    top: 100%;
+                    width: 100%;
+                    background-color: lightgray;
+                    color: black;
+                    list-style-type: none;
+                    margin: 0;
+                    padding: 0;
+                    
+                    > .sugItem {
+                        margin: 0;
+                        padding: 0;
+                        
+                        &:hover {
+                            background-color: gray;
+                            color: white;
+                            cursor: pointer;
+                        }
+                        
+                        &.sel {
+                            background-color: dodgerblue;
+                            color: white;
+                        }
+                    }
+                }
+                
+                > input {
+                    margin: 0;
+                    padding: 0;
+                    height: 30px;
+                    margin-right: 10px;
+                }
+            }
+            
+            > h3 {
+                display: inline-flex;
+                align-items: center;
+                justify-content: center;
+            }
+        }
+    }
+}

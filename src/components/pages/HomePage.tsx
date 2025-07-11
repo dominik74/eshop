@@ -46,7 +46,7 @@ export default function HomePage(props: Props) {
                         
                         <h3><Link to={`/product/${prod.id}`}>{prod.name}</Link></h3>
                         <p>{prod.brand}</p>
-                        <p>${prod.price}</p>
+                        <p className={s.price}>${prod.price}</p>
                         
                     </div>
                 ))}

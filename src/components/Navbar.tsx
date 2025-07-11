@@ -14,7 +14,7 @@ interface Props {
 export default function Navbar(props: Props) {
     const [productResults, setProductResults] = useState<Product[] | undefined>();
     const [searchValue, setSearchValue] = useState<string>('');
-    const [selectedSuggestionIdx, setSelectedSuggestionIdx] = useState<number>(0);
+    const [selectedSuggestionIdx, setSelectedSuggestionIdx] = useState<number>(-1);
     
     const searchboxRef = useRef<HTMLInputElement>(null);
     const suggestionsRef = useRef<HTMLUListElement>(null);
@@ -46,6 +46,7 @@ export default function Navbar(props: Props) {
     async function searchboxKeyUp(event: React.KeyboardEvent<HTMLInputElement>) {
         if (event.currentTarget.value.length <= 2) {
             setProductResults([]);
+            setSelectedSuggestionIdx(-1);
             return;
         }
         
@@ -68,7 +69,14 @@ export default function Navbar(props: Props) {
         }
         
         if (productResults && event.key === 'Enter') {
-            acceptSuggestion(productResults[selectedSuggestionIdx].id);
+            if (selectedSuggestionIdx >= 0) {
+                acceptSuggestion(productResults[selectedSuggestionIdx].id);
+            } else {
+                navigate('/search?q=' + event.currentTarget.value);
+                setProductResults([]);
+                setSearchValue('');
+            }
+            
             return;
         }
         
@@ -86,7 +94,7 @@ export default function Navbar(props: Props) {
         navigate('/product/' + prodId);
         setProductResults([]);
         setSearchValue('');
-        setSelectedSuggestionIdx(0);
+        setSelectedSuggestionIdx(-1);
     }
     
     function logout() {

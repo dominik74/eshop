@@ -14,6 +14,7 @@ import PageNotFoundPage from './pages/PageNotFoundPage'
 import ProtectedRoute from './ProtectedRoute'
 import { LOCAL_STORAGE_AUTH_TOKEN } from '../constants'
 import { getUserDetails } from '../api/auth'
+import SearchResultsPage from './pages/SearchResultsPage'
 
 export default function RoutesWrapper() {
   const [errorMessage, setErrorMessage] = useState<string>('');
@@ -61,6 +62,7 @@ export default function RoutesWrapper() {
             <Route path="/product/:id" element={<ProductPage setErrorMessage={setErrorMessage} user={user} />} />
             <Route path="/login" element={<AuthPage setErrorMessage={setErrorMessage} setUser={setUser} isLoginPage={true} />} />
             <Route path="/register" element={<AuthPage setErrorMessage={setErrorMessage} setUser={setUser} isLoginPage={false} />} />
+            <Route path="/search" element={<SearchResultsPage setErrorMessage={setErrorMessage} />} />
             <Route path="/error" element={<ErrorPage />} />
             <Route path="*" element={<PageNotFoundPage />} />
             

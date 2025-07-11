@@ -39,7 +39,7 @@ export default function SearchResultsPage(props: Props) {
         <>
             <h1>results for "{query.get('q')}"</h1>
             <p>found {products.length} products.</p>
-            <ProductList products={products} />
+            <ProductList products={products} setProducts={setProducts} />
         </>
     )
 }

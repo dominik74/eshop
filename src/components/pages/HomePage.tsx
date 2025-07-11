@@ -29,7 +29,7 @@ export default function HomePage(props: Props) {
     return (
         <>
             <h1>home</h1>
-            <ProductList products={products} />
+            <ProductList products={products} setProducts={setProducts} />
         </>
     );
 }

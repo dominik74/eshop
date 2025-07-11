@@ -1,9 +1,7 @@
 import { useEffect, useState } from "react";
 import type { Product } from "../../types/Product";
-import { Link } from "react-router-dom";
-import s from '../../less/home.module.less'
-// import { getProducts } from "../api";
 import * as prodApi from "../../api/products";
+import ProductList from "../ProductList";
 
 interface Props {
     setErrorMessage: React.Dispatch<React.SetStateAction<string>>;
@@ -28,29 +26,10 @@ export default function HomePage(props: Props) {
         run();
     }, []);
     
-    
-    
     return (
-        <div className={s.component}>
-            <h1>home</h1>  
-            
-            <div className={s.grid}>
-                {products.map(prod => (
-                    <div
-                        className={s.card}
-                        key={prod.id}
-                    >
-                        {prod.imageUrl &&
-                            <img src={prod.imageUrl} />
-                        }
-                        
-                        <h3><Link to={`/product/${prod.id}`}>{prod.name}</Link></h3>
-                        <p>{prod.brand}</p>
-                        <p className={s.price}>${prod.price}</p>
-                        
-                    </div>
-                ))}
-            </div>
-        </div>
+        <>
+            <h1>home</h1>
+            <ProductList products={products} />
+        </>
     );
 }

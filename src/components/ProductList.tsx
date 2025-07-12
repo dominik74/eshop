@@ -6,6 +6,8 @@ import { useState } from 'react';
 interface Props {
     products: Product[];
     setProducts: React.Dispatch<React.SetStateAction<Product[]>>;
+    cartProducts: Product[];
+    setCartProducts: React.Dispatch<React.SetStateAction<Product[]>>;
 }
 
 export default function ProductList(props: Props) {
@@ -35,6 +37,25 @@ export default function ProductList(props: Props) {
         setActiveFilter(2);
     }
     
+    function addToCart(product: Product) {
+        props.setCartProducts([...props.cartProducts, product]);
+        console.log(props.cartProducts);
+    }
+    
+    function removeFromCart(product: Product) {
+        props.setCartProducts(prevProducts => prevProducts.filter(prod => prod.id !== product.id));
+    }
+    
+    function isProductInCart(product: Product): boolean {
+        for (const prod of props.cartProducts) {
+            if (prod.id === product.id) {
+                return true;
+            }
+        }
+        
+        return false;
+    }
+    
     return (
         <div className={s.component}>
             <div className={s.sortbar}>
@@ -56,6 +77,11 @@ export default function ProductList(props: Props) {
                         <p>{prod.brand}</p>
                         <p className={s.price}>${prod.price}</p>
                         
+                        {!isProductInCart(prod) ?
+                            <button onClick={() => addToCart(prod)}>add to cart</button>
+                        :
+                            <button onClick={() => removeFromCart(prod)}>remove from cart</button>
+                        }
                     </div>
                 ))}
             </div>

@@ -108,6 +108,8 @@ export default function Navbar(props: Props) {
                 <Link to="/">home</Link>
                 <Link to="/add_product">add product</Link>
                 <Link to="/login">login</Link>
+                <Link to="/cart">cart</Link>
+                
                 <div className={s.right}>
                     <span>
                         {props.user?.username}

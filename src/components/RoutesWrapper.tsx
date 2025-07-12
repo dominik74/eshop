@@ -15,10 +15,13 @@ import ProtectedRoute from './ProtectedRoute'
 import { LOCAL_STORAGE_AUTH_TOKEN } from '../constants'
 import { getUserDetails } from '../api/auth'
 import SearchResultsPage from './pages/SearchResultsPage'
+import type { Product } from '../types/Product'
+import CartPage from './pages/CartPage'
 
 export default function RoutesWrapper() {
   const [errorMessage, setErrorMessage] = useState<string>('');
   const [user, setUser] = useState<User | undefined>();
+  const [cartProducts, setCartProducts] = useState<Product[]>([]);
   
   const navigate = useNavigate();
   
@@ -58,11 +61,12 @@ export default function RoutesWrapper() {
         <div className={s.page}>
             <Routes>
             {/* public */}
-            <Route path="/" element={<HomePage setErrorMessage={setErrorMessage} />} />
-            <Route path="/product/:id" element={<ProductPage setErrorMessage={setErrorMessage} user={user} />} />
+            <Route path="/" element={<HomePage setErrorMessage={setErrorMessage} cartProducts={cartProducts} setCartProducts={setCartProducts} />} />
+            <Route path="/product/:id" element={<ProductPage setErrorMessage={setErrorMessage} user={user} cartProducts={cartProducts} setCartProducts={setCartProducts} />} />
             <Route path="/login" element={<AuthPage setErrorMessage={setErrorMessage} setUser={setUser} isLoginPage={true} />} />
             <Route path="/register" element={<AuthPage setErrorMessage={setErrorMessage} setUser={setUser} isLoginPage={false} />} />
-            <Route path="/search" element={<SearchResultsPage setErrorMessage={setErrorMessage} />} />
+            <Route path="/search" element={<SearchResultsPage setErrorMessage={setErrorMessage} cartProducts={cartProducts} setCartProducts={setCartProducts} />} />
+            <Route path="/cart" element={<CartPage cartProducts={cartProducts} setCartProducts={setCartProducts} />} />
             <Route path="/error" element={<ErrorPage />} />
             <Route path="*" element={<PageNotFoundPage />} />
             

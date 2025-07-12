@@ -5,6 +5,8 @@ import ProductList from "../ProductList";
 
 interface Props {
     setErrorMessage: React.Dispatch<React.SetStateAction<string>>;
+    cartProducts: Product[];
+    setCartProducts: React.Dispatch<React.SetStateAction<Product[]>>;
 }
 
 export default function HomePage(props: Props) {
@@ -29,7 +31,13 @@ export default function HomePage(props: Props) {
     return (
         <>
             <h1>home</h1>
-            <ProductList products={products} setProducts={setProducts} />
+            
+            <ProductList
+                products={products}
+                setProducts={setProducts}
+                cartProducts={props.cartProducts}
+                setCartProducts={props.setCartProducts}
+            />
         </>
     );
 }

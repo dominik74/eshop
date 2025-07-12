@@ -6,6 +6,8 @@ import type { Product } from '../../types/Product';
 
 interface Props {
     setErrorMessage: React.Dispatch<React.SetStateAction<string>>;
+    cartProducts: Product[];
+    setCartProducts: React.Dispatch<React.SetStateAction<Product[]>>;
 }
 
 export default function SearchResultsPage(props: Props) {
@@ -39,7 +41,13 @@ export default function SearchResultsPage(props: Props) {
         <>
             <h1>results for "{query.get('q')}"</h1>
             <p>found {products.length} products.</p>
-            <ProductList products={products} setProducts={setProducts} />
+            
+            <ProductList
+                products={products}
+                setProducts={setProducts}
+                cartProducts={props.cartProducts}
+                setCartProducts={props.setCartProducts}
+            />
         </>
     )
 }

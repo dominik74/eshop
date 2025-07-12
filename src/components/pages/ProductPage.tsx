@@ -8,6 +8,8 @@ import type { User } from "../../types/User";
 interface Props {
     setErrorMessage: React.Dispatch<React.SetStateAction<string>>;
     user: User | undefined;
+    cartProducts: Product[];
+    setCartProducts: React.Dispatch<React.SetStateAction<Product[]>>;
 }
 
 export default function ProductPage(props: Props) {
@@ -66,6 +68,36 @@ export default function ProductPage(props: Props) {
         return date ? new Date(date).toLocaleDateString() : '';
     }, [product?.releaseDate]);
     
+    function addToCart() {
+        if (!product) {
+            return;
+        }
+        
+        props.setCartProducts([...props.cartProducts, product]);
+    }
+    
+    function removeFromCart() {
+        if (!product) {
+            return;
+        }
+        
+        props.setCartProducts(prevProducts => prevProducts.filter(prod => prod.id !== product.id));
+    }
+    
+    function isProductInCart(): boolean {
+        if (!product) {
+            return false;
+        }
+        
+        for (const prod of props.cartProducts) {
+            if (prod.id === product.id) {
+                return true;
+            }
+        }
+        
+        return false;
+    }
+    
     return (
         <div className={s.component}>
             {imageUrl &&
@@ -79,6 +111,12 @@ export default function ProductPage(props: Props) {
             <p>stock available: {product?.quantity}</p>
             <p>category: {product?.category}</p>
             <p>listed: {releaseDate}</p>
+            
+            {isProductInCart() ?
+                <button onClick={removeFromCart}>remove from cart</button>
+            :
+                <button onClick={addToCart}>add to cart</button>
+            }
             
             {props.user && props.user.admin &&
                 <div className={s.adminPanel}>

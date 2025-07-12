@@ -12,10 +12,11 @@ import RedirectListener from './RedirectListener'
 import type { User } from '../types/User'
 import PageNotFoundPage from './pages/PageNotFoundPage'
 import ProtectedRoute from './ProtectedRoute'
-import { LOCAL_STORAGE_AUTH_TOKEN } from '../constants'
+import { LOCAL_STORAGE_AUTH_TOKEN, LOCAL_STORAGE_CART_ITEMS } from '../constants'
 import { getUserDetails } from '../api/auth'
 import SearchResultsPage from './pages/SearchResultsPage'
 import type { Product } from '../types/Product'
+import * as prodApi from '../api/products';
 import CartPage from './pages/CartPage'
 
 export default function RoutesWrapper() {
@@ -26,28 +27,54 @@ export default function RoutesWrapper() {
   const navigate = useNavigate();
   
   useEffect(() => {
-      async function tryAutologin() {
-          if (user) {
-              return;
-          }
-          
-          const token = localStorage.getItem(LOCAL_STORAGE_AUTH_TOKEN);
-      
-          if (!token) {
-              return;
-          }
-          
-          try {
-              setUser(await getUserDetails(token));
-          } catch (e) {
-              if (e instanceof Error) {
-                navigate('/login');
-              }
-          }
-      }
-   
       tryAutologin();
+      tryLoadCartProducts();
   }, []);
+  
+  useEffect(() => {
+    const ids = [];
+    
+    for (const cartProd of cartProducts) {
+        ids.push(cartProd.id);
+    }
+    
+    localStorage.setItem(LOCAL_STORAGE_CART_ITEMS, JSON.stringify(ids));
+  }, [cartProducts]);
+  
+  async function tryAutologin() {
+    if (user) {
+        return;
+    }
+    
+    const token = localStorage.getItem(LOCAL_STORAGE_AUTH_TOKEN);
+
+    if (!token) {
+        return;
+    }
+    
+    try {
+        setUser(await getUserDetails(token));
+    } catch (e) {
+        if (e instanceof Error) {
+            navigate('/login');
+        }
+    }
+  }
+  
+  async function tryLoadCartProducts() {
+    const cartIdsString = localStorage.getItem(LOCAL_STORAGE_CART_ITEMS);
+      
+    const cartIds = cartIdsString ? JSON.parse(cartIdsString) : [];
+      
+    const cartProds = [];
+    
+    for (const cartId of cartIds) {
+        const product = await prodApi.getProductById(cartId);
+        cartProds.push(product);
+    }
+    
+    setCartProducts(cartProds);
+  }
   
   return (
     <div className={s.component}>

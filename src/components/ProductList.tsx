@@ -39,7 +39,6 @@ export default function ProductList(props: Props) {
     
     function addToCart(product: Product) {
         props.setCartProducts([...props.cartProducts, product]);
-        console.log(props.cartProducts);
     }
     
     function removeFromCart(product: Product) {

@@ -1,18 +1,74 @@
 import type { Product } from "../../types/Product";
 import s from '../../less/cart.module.less';
 import ProductList from "../ProductList";
+import * as ordersApi from '../../api/orders';
+import type { OrderItem } from "../../types/OrderItem";
+import { useMemo, type Dispatch, type SetStateAction } from "react";
+import type { User } from "../../types/User";
+import { useNavigate } from "react-router-dom";
 
 interface Props {
-    cartProducts: Product[];
-    setCartProducts: React.Dispatch<React.SetStateAction<Product[]>>;
+    orderItems: OrderItem[];
+    setOrderItems: React.Dispatch<React.SetStateAction<OrderItem[]>>;
+    user: User | undefined;
+    setErrorMessage: React.Dispatch<React.SetStateAction<string>>;
 }
 
 export default function CartPage(props: Props) {
+    const navigate = useNavigate();
+    
+    const products = useMemo(() =>
+        props.orderItems.map(cartProd => cartProd.product),
+    [props.orderItems]);
+    
+    const setProducts: Dispatch<SetStateAction<Product[]>> = (valueOrUpdater) => {
+        props.setOrderItems(prevOrderItems => {
+            const newProducts = typeof valueOrUpdater === 'function' ?
+            (valueOrUpdater as (prev: Product[]) => Product[])(
+                prevOrderItems.map(oi => oi.product).filter((p): p is Product => !!p)
+            )
+            : valueOrUpdater;
+            
+            
+            return newProducts.map(product => {
+               const orderItem = prevOrderItems.find(oi => oi.product.id === product.id);
+               return orderItem ? { ...orderItem, product } : undefined;
+            })
+            .filter((oi): oi is OrderItem => !!oi);
+        });
+    };
+    
+    
     function clearCart() {
         const userConfirmed = confirm('empty cart?');
         
         if (userConfirmed) {
-            props.setCartProducts([]);
+            props.setOrderItems([]);
+        }
+    }
+    
+    function getTotalPrice(): number {
+        let total = 0;
+        
+        for (const orderItem of props.orderItems) {
+            total += Number(orderItem.product.price) * orderItem.quantity;
+        }
+        
+        return Math.round(total * 100) / 100;
+    }
+    
+    async function placeOrder() {
+        if (!props.user) {
+            navigate('/login');
+            return;
+        }
+        
+        try {
+            console.log(await ordersApi.placeOrder(props.user.username, props.orderItems));
+        } catch (e) {
+            if (e instanceof Error) {
+                props.setErrorMessage(e.message);
+            }
         }
     }
     
@@ -23,11 +79,21 @@ export default function CartPage(props: Props) {
             <button onClick={clearCart} className={s.clearCart}>empty cart</button>
             
             <ProductList
-                products={props.cartProducts}
-                setProducts={props.setCartProducts}
-                cartProducts={props.cartProducts}
-                setCartProducts={props.setCartProducts}
+                products={products}
+                setProducts={setProducts}
+                orderItems={props.orderItems}
+                setOrderItems={props.setOrderItems}
             />
+            
+            <button onClick={placeOrder} className={s.placeOrderBtn}>
+                {props.user ?
+                    'place order'
+                :
+                    'login to place order'
+                }
+                
+                &nbsp;(total: ${getTotalPrice()})
+            </button>
         </div>
     )
 }

@@ -2,12 +2,13 @@ import { Link } from 'react-router-dom';
 import s from '../less/product_list.module.less';
 import type { Product } from '../types/Product';
 import { useState } from 'react';
+import type { OrderItem } from '../types/OrderItem';
 
 interface Props {
     products: Product[];
     setProducts: React.Dispatch<React.SetStateAction<Product[]>>;
-    cartProducts: Product[];
-    setCartProducts: React.Dispatch<React.SetStateAction<Product[]>>;
+    orderItems: OrderItem[];
+    setOrderItems: React.Dispatch<React.SetStateAction<OrderItem[]>>;
 }
 
 export default function ProductList(props: Props) {
@@ -38,21 +39,44 @@ export default function ProductList(props: Props) {
     }
     
     function addToCart(product: Product) {
-        props.setCartProducts([...props.cartProducts, product]);
+        const orderItem: OrderItem = {
+            product,
+            quantity: 1
+        };
+        
+        props.setOrderItems([...props.orderItems, orderItem]);
     }
     
     function removeFromCart(product: Product) {
-        props.setCartProducts(prevProducts => prevProducts.filter(prod => prod.id !== product.id));
+        props.setOrderItems(prevOrderItems => prevOrderItems.filter(oi => oi.product.id !== product.id));
     }
     
     function isProductInCart(product: Product): boolean {
-        for (const prod of props.cartProducts) {
-            if (prod.id === product.id) {
+        for (const oi of props.orderItems) {
+            if (oi.product.id === product.id) {
                 return true;
             }
         }
         
         return false;
+    }
+    
+    function getOrderItemFromProduct(product: Product) {
+        for (const oi of props.orderItems) {
+            if (oi.product.id === product.id) {
+                return oi;
+            }
+        }
+        
+        return undefined;
+    }
+    
+    function updateOrderItem(product: Product, quantity: number) {
+        props.setOrderItems(prev =>
+           prev.map(oi =>
+               oi.product.id === product.id ? { ...oi, quantity } : oi
+           )
+        );
     }
     
     return (
@@ -79,7 +103,15 @@ export default function ProductList(props: Props) {
                         {!isProductInCart(prod) ?
                             <button onClick={() => addToCart(prod)}>add to cart</button>
                         :
-                            <button onClick={() => removeFromCart(prod)}>remove from cart</button>
+                            <>
+                                <button onClick={() => removeFromCart(prod)}>remove from cart</button>
+                                
+                                <input
+                                    type="text"
+                                    value={getOrderItemFromProduct(prod)?.quantity}
+                                    onChange={(e) => updateOrderItem(prod, Number(e.currentTarget.value))}
+                                />
+                            </>
                         }
                     </div>
                 ))}

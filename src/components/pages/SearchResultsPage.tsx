@@ -1,13 +1,14 @@
-import { useLocation, useParams } from 'react-router-dom';
+import { useLocation } from 'react-router-dom';
 import ProductList from '../ProductList';
 import * as prodApi from '../../api/products';
 import { useEffect, useState } from 'react';
 import type { Product } from '../../types/Product';
+import type { OrderItem } from '../../types/OrderItem';
 
 interface Props {
     setErrorMessage: React.Dispatch<React.SetStateAction<string>>;
-    cartProducts: Product[];
-    setCartProducts: React.Dispatch<React.SetStateAction<Product[]>>;
+    orderItems: OrderItem[];
+    setOrderItems: React.Dispatch<React.SetStateAction<OrderItem[]>>;
 }
 
 export default function SearchResultsPage(props: Props) {
@@ -45,8 +46,8 @@ export default function SearchResultsPage(props: Props) {
             <ProductList
                 products={products}
                 setProducts={setProducts}
-                cartProducts={props.cartProducts}
-                setCartProducts={props.setCartProducts}
+                orderItems={props.orderItems}
+                setOrderItems={props.setOrderItems}
             />
         </>
     )

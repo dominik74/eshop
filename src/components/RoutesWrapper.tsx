@@ -15,31 +15,41 @@ import ProtectedRoute from './ProtectedRoute'
 import { LOCAL_STORAGE_AUTH_TOKEN, LOCAL_STORAGE_CART_ITEMS } from '../constants'
 import { getUserDetails } from '../api/auth'
 import SearchResultsPage from './pages/SearchResultsPage'
-import type { Product } from '../types/Product'
 import * as prodApi from '../api/products';
 import CartPage from './pages/CartPage'
+import type { OrderItem } from '../types/OrderItem'
+import type { OrderItemDto } from '../types/dtos/OrderItemDto'
 
 export default function RoutesWrapper() {
   const [errorMessage, setErrorMessage] = useState<string>('');
   const [user, setUser] = useState<User | undefined>();
-  const [cartProducts, setCartProducts] = useState<Product[]>([]);
+  const [orderItems, setOrderItems] = useState<OrderItem[]>([]);
   
   const navigate = useNavigate();
   
   useEffect(() => {
       tryAutologin();
-      tryLoadCartProducts();
+      tryLoadOrderItems();
   }, []);
   
   useEffect(() => {
-    const ids = [];
+    const orderItemDtos = [];
     
-    for (const cartProd of cartProducts) {
-        ids.push(cartProd.id);
+    for (const item of orderItems) {
+        if (!item.product.id) {
+            continue;
+        }
+        
+        const orderItemDto: OrderItemDto = {
+            productId: item.product.id,
+            quantity: item.quantity
+        }
+        
+        orderItemDtos.push(orderItemDto);
     }
     
-    localStorage.setItem(LOCAL_STORAGE_CART_ITEMS, JSON.stringify(ids));
-  }, [cartProducts]);
+    localStorage.setItem(LOCAL_STORAGE_CART_ITEMS, JSON.stringify(orderItemDtos));
+  }, [orderItems]);
   
   async function tryAutologin() {
     if (user) {
@@ -61,19 +71,22 @@ export default function RoutesWrapper() {
     }
   }
   
-  async function tryLoadCartProducts() {
-    const cartIdsString = localStorage.getItem(LOCAL_STORAGE_CART_ITEMS);
+  async function tryLoadOrderItems() {
+    const orderItemDtosString = localStorage.getItem(LOCAL_STORAGE_CART_ITEMS);
       
-    const cartIds = cartIdsString ? JSON.parse(cartIdsString) : [];
+    const orderItemDtos: OrderItemDto[] = orderItemDtosString ? JSON.parse(orderItemDtosString) : [];
       
-    const cartProds = [];
+    const ordItems: OrderItem[] = [];
     
-    for (const cartId of cartIds) {
-        const product = await prodApi.getProductById(cartId);
-        cartProds.push(product);
+    for (const orderItemDto of orderItemDtos) {
+        const product = await prodApi.getProductById(orderItemDto.productId.toString());
+        ordItems.push({
+            product,
+            quantity: orderItemDto.quantity
+        });
     }
     
-    setCartProducts(cartProds);
+    setOrderItems(ordItems);
   }
   
   return (
@@ -88,12 +101,12 @@ export default function RoutesWrapper() {
         <div className={s.page}>
             <Routes>
             {/* public */}
-            <Route path="/" element={<HomePage setErrorMessage={setErrorMessage} cartProducts={cartProducts} setCartProducts={setCartProducts} />} />
-            <Route path="/product/:id" element={<ProductPage setErrorMessage={setErrorMessage} user={user} cartProducts={cartProducts} setCartProducts={setCartProducts} />} />
+            <Route path="/" element={<HomePage setErrorMessage={setErrorMessage} orderItems={orderItems} setOrderItems={setOrderItems} />} />
+            <Route path="/product/:id" element={<ProductPage setErrorMessage={setErrorMessage} user={user} orderItems={orderItems} setOrderItems={setOrderItems} />} />
             <Route path="/login" element={<AuthPage setErrorMessage={setErrorMessage} setUser={setUser} isLoginPage={true} />} />
             <Route path="/register" element={<AuthPage setErrorMessage={setErrorMessage} setUser={setUser} isLoginPage={false} />} />
-            <Route path="/search" element={<SearchResultsPage setErrorMessage={setErrorMessage} cartProducts={cartProducts} setCartProducts={setCartProducts} />} />
-            <Route path="/cart" element={<CartPage cartProducts={cartProducts} setCartProducts={setCartProducts} />} />
+            <Route path="/search" element={<SearchResultsPage setErrorMessage={setErrorMessage} orderItems={orderItems} setOrderItems={setOrderItems} />} />
+            <Route path="/cart" element={<CartPage orderItems={orderItems} setOrderItems={setOrderItems} user={user} setErrorMessage={setErrorMessage} />} />
             <Route path="/error" element={<ErrorPage />} />
             <Route path="*" element={<PageNotFoundPage />} />
             

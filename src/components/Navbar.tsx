@@ -105,16 +105,47 @@ export default function Navbar(props: Props) {
     return (
         <div className={s.component}>
             <nav>
-                <Link to="/">home</Link>
+                <div className={s.leftSide}>
+                    <Link to="/" className={s.specialLink}>shoppingo</Link>
                 
-                {props.user && props.user.admin &&
-                    <Link to="/add_product">add product</Link>
-                }
+                    {props.user && props.user.admin &&
+                        <Link to="/add_product">add product</Link>
+                    }
+                    
+                    <Link to="/login">login</Link>
+                    <Link to="/cart">cart</Link>
+                </div>
                 
-                <Link to="/login">login</Link>
-                <Link to="/cart">cart</Link>
+                <div className={s.searchbox}>
+                        <input
+                            type="text"
+                            onKeyUp={searchboxKeyUp}
+                            onKeyDown={searchboxKeyDown}
+                            value={searchValue}
+                            onChange={(e) => setSearchValue(e.target.value)}
+                            placeholder="Search products..."
+                            ref={searchboxRef}
+                        />
+                    
+                    {productResults && productResults.length > 0 &&
+                        <ul
+                            className={s.suggestions}
+                            ref={suggestionsRef}
+                        >
+                            {productResults.map((prod, i) => (
+                                <li
+                                    className={`${s.sugItem} ${selectedSuggestionIdx === i && s.sel}`}
+                                    onClick={() => acceptSuggestion(prod.id)}
+                                    key={i}
+                                >
+                                    {prod.name}
+                                </li>
+                            ))}
+                        </ul>
+                    }
+                </div>
                 
-                <div className={s.right}>
+                <div className={s.rightSide}>
                     <span>
                         {props.user?.username}
                         {props.user?.admin &&
@@ -130,35 +161,6 @@ export default function Navbar(props: Props) {
                     {props.user &&
                         <button onClick={logout}>log out</button>
                     }
-                    <div className={s.searchbox}>
-                        <input
-                            type="text"
-                            onKeyUp={searchboxKeyUp}
-                            onKeyDown={searchboxKeyDown}
-                            value={searchValue}
-                            onChange={(e) => setSearchValue(e.target.value)}
-                            placeholder="search product..."
-                            ref={searchboxRef}
-                        />
-                        
-                        {productResults && productResults.length > 0 &&
-                            <ul
-                                className={s.suggestions}
-                                ref={suggestionsRef}
-                            >
-                                {productResults.map((prod, i) => (
-                                    <li
-                                        className={`${s.sugItem} ${selectedSuggestionIdx === i && s.sel}`}
-                                        onClick={() => acceptSuggestion(prod.id)}
-                                        key={i}
-                                    >
-                                        {prod.name}
-                                    </li>
-                                ))}
-                            </ul>
-                        }
-                    </div>
-                    <h3>shoppingo</h3>
                 </div>
             </nav> 
         </div>

@@ -3,7 +3,7 @@ import type { OrderItemDto } from "../types/dtos/OrderItemDto";
 import type { OrderRequest } from "../types/dtos/OrderRequest";
 import type { OrderItem } from "../types/OrderItem";
 
-export async function placeOrder(username: string, orderItems: OrderItem[]) {
+export async function placeOrder(username: string, orderItems: OrderItem[], token: string) {
     const orderItemDtos: OrderItemDto[] = [];
     
     for (const oi of orderItems) {
@@ -28,6 +28,7 @@ export async function placeOrder(username: string, orderItems: OrderItem[]) {
         method: 'post',
         body: JSON.stringify(orderReq),
         headers: {
+            'Authorization': `Bearer ${token}`,
             'Content-Type': 'application/json'
         }
     });
@@ -35,6 +36,4 @@ export async function placeOrder(username: string, orderItems: OrderItem[]) {
     if (!resp.ok) {
         throw new Error(`${resp.status}: ${await resp.text()}`);
     }
-    
-    return await resp.json();
 }

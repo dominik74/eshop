@@ -116,6 +116,11 @@ export default function Navbar(props: Props) {
                         {props.user?.admin &&
                             ' (admin)'
                         }
+                        
+                        {/* for testing */}
+                        {props.user &&
+                            ', money: ' + props.user?.money
+                        }
                     </span>
                     
                     {props.user &&

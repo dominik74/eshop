@@ -2,15 +2,18 @@ import type { Product } from "../../types/Product";
 import s from '../../less/cart.module.less';
 import ProductList from "../ProductList";
 import * as ordersApi from '../../api/orders';
+import * as authApi from '../../api/auth';
 import type { OrderItem } from "../../types/OrderItem";
 import { useMemo, type Dispatch, type SetStateAction } from "react";
 import type { User } from "../../types/User";
 import { useNavigate } from "react-router-dom";
+import { LOCAL_STORAGE_AUTH_TOKEN } from "../../constants";
 
 interface Props {
     orderItems: OrderItem[];
     setOrderItems: React.Dispatch<React.SetStateAction<OrderItem[]>>;
     user: User | undefined;
+    setUser: React.Dispatch<React.SetStateAction<User | undefined>>;
     setErrorMessage: React.Dispatch<React.SetStateAction<string>>;
 }
 
@@ -64,7 +67,15 @@ export default function CartPage(props: Props) {
         }
         
         try {
-            console.log(await ordersApi.placeOrder(props.user.username, props.orderItems));
+            const authToken = localStorage.getItem(LOCAL_STORAGE_AUTH_TOKEN);
+            
+            if (!authToken) {
+                return;
+            }
+            
+            await ordersApi.placeOrder(props.user.username, props.orderItems, authToken);
+            const user = await authApi.getUserDetails(authToken);
+            props.setUser(user);
         } catch (e) {
             if (e instanceof Error) {
                 props.setErrorMessage(e.message);

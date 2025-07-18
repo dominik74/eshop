@@ -106,7 +106,7 @@ export default function RoutesWrapper() {
             <Route path="/login" element={<AuthPage setErrorMessage={setErrorMessage} setUser={setUser} isLoginPage={true} />} />
             <Route path="/register" element={<AuthPage setErrorMessage={setErrorMessage} setUser={setUser} isLoginPage={false} />} />
             <Route path="/search" element={<SearchResultsPage setErrorMessage={setErrorMessage} orderItems={orderItems} setOrderItems={setOrderItems} />} />
-            <Route path="/cart" element={<CartPage orderItems={orderItems} setOrderItems={setOrderItems} user={user} setErrorMessage={setErrorMessage} />} />
+            <Route path="/cart" element={<CartPage orderItems={orderItems} setOrderItems={setOrderItems} user={user} setUser={setUser} setErrorMessage={setErrorMessage} />} />
             <Route path="/error" element={<ErrorPage />} />
             <Route path="*" element={<PageNotFoundPage />} />
             

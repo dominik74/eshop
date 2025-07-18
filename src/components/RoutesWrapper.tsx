@@ -24,6 +24,7 @@ export default function RoutesWrapper() {
   const [errorMessage, setErrorMessage] = useState<string>('');
   const [user, setUser] = useState<User | undefined>();
   const [orderItems, setOrderItems] = useState<OrderItem[]>([]);
+  const [searchValue, setSearchValue] = useState<string>('');
   
   const navigate = useNavigate();
   
@@ -91,8 +92,8 @@ export default function RoutesWrapper() {
   
   return (
     <div className={s.component}>
-        <RedirectListener setErrorMessage={setErrorMessage} />
-        <Navbar setErrorMessage={setErrorMessage} user={user} />
+        <RedirectListener setErrorMessage={setErrorMessage} setSearchValue={setSearchValue} />
+        <Navbar setErrorMessage={setErrorMessage} searchValue={searchValue} setSearchValue={setSearchValue} user={user} />
         
         {errorMessage &&
             <ErrorBar errorMessage={errorMessage} />

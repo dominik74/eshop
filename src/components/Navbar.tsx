@@ -8,12 +8,13 @@ import { LOCAL_STORAGE_AUTH_TOKEN } from "../constants";
 
 interface Props {
     setErrorMessage: React.Dispatch<React.SetStateAction<string>>;
+    searchValue: string;
+    setSearchValue: React.Dispatch<React.SetStateAction<string>>;
     user: User | undefined;
 }
 
 export default function Navbar(props: Props) {
     const [productResults, setProductResults] = useState<Product[] | undefined>();
-    const [searchValue, setSearchValue] = useState<string>('');
     const [selectedSuggestionIdx, setSelectedSuggestionIdx] = useState<number>(-1);
     
     const searchboxRef = useRef<HTMLInputElement>(null);
@@ -74,7 +75,6 @@ export default function Navbar(props: Props) {
             } else {
                 navigate('/search?q=' + event.currentTarget.value);
                 setProductResults([]);
-                setSearchValue('');
             }
             
             return;
@@ -93,7 +93,7 @@ export default function Navbar(props: Props) {
     function acceptSuggestion(prodId?: number) {
         navigate('/product/' + prodId);
         setProductResults([]);
-        setSearchValue('');
+        props.setSearchValue('');
         setSelectedSuggestionIdx(-1);
     }
     
@@ -121,8 +121,8 @@ export default function Navbar(props: Props) {
                             type="text"
                             onKeyUp={searchboxKeyUp}
                             onKeyDown={searchboxKeyDown}
-                            value={searchValue}
-                            onChange={(e) => setSearchValue(e.target.value)}
+                            value={props.searchValue}
+                            onChange={(e) => props.setSearchValue(e.target.value)}
                             placeholder="Search products..."
                             ref={searchboxRef}
                         />

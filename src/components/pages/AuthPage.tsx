@@ -3,6 +3,7 @@ import * as authApi from '../../api/auth'
 import type { User } from '../../types/User';
 import { useNavigate } from 'react-router-dom';
 import { LOCAL_STORAGE_AUTH_TOKEN } from '../../constants';
+import { useEffect, useRef } from 'react';
 
 interface Props {
   setErrorMessage: React.Dispatch<React.SetStateAction<string>>;
@@ -12,6 +13,11 @@ interface Props {
 
 export default function AuthPage(props: Props) {
     const navigate = useNavigate();
+    const firstInputRef = useRef<HTMLInputElement>(null);
+    
+    useEffect(() => {
+      firstInputRef.current?.focus();
+    }, []);
   
     async function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
       event.preventDefault();
@@ -72,7 +78,8 @@ export default function AuthPage(props: Props) {
       }
     }
     
-    function switchAuthMethod() {
+    function switchAuthMethod(e: React.MouseEvent) {
+      e.preventDefault();
       navigate(props.isLoginPage ? "/register" : "/login");
     }
   
@@ -81,7 +88,7 @@ export default function AuthPage(props: Props) {
         <form onSubmit={handleSubmit}>
           <label>
             <span>username or email</span>
-            <input type="text" name="username" className={s.special} required />
+            <input ref={firstInputRef} type="text" name="username" className={s.special} required />
           </label>
           
           <label>
@@ -96,10 +103,12 @@ export default function AuthPage(props: Props) {
             </label>
           }
           
-          <input type="submit" value={props.isLoginPage ? "login" : "register"} />
+          <div className={s.buttonbar}>
+            <button onClick={switchAuthMethod}>{props.isLoginPage ? "register..." : "login..."}</button>
+            <input type="submit" value={props.isLoginPage ? "login" : "register"} />
+          </div>
         </form>
         
-        <button onClick={switchAuthMethod}>{props.isLoginPage ? "register..." : "login..."}</button>
       </div>
     );
 }

@@ -106,7 +106,11 @@ export default function Navbar(props: Props) {
         <div className={s.component}>
             <nav>
                 <Link to="/">home</Link>
-                <Link to="/add_product">add product</Link>
+                
+                {props.user && props.user.admin &&
+                    <Link to="/add_product">add product</Link>
+                }
+                
                 <Link to="/login">login</Link>
                 <Link to="/cart">cart</Link>
                 

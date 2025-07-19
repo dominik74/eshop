@@ -6,7 +6,7 @@ body {
     margin: 0;
 }
 
-button, input[type="submit"] {
+button, input[type="submit"], input[type="file"], input[type="button"] {
     background-color: rgb(225, 225, 225);
     border: none;
     padding: 10px;
@@ -24,7 +24,9 @@ input[type="password"],
 input[type="search"],
 input[type="tel"],
 input[type="url"],
-input[type="number"] {
+input[type="number"],
+input[type="date"],
+textarea {
     box-sizing: border-box;
     border: 1px solid gray;
     border-radius: 3px;
@@ -33,7 +35,7 @@ input[type="number"] {
     margin: 0;
     padding: 0;
     // todo: get rid of !important?
-    padding: 0 6px !important;
+    padding: 6px !important;
     
     &:hover {
         background-color: rgb(245, 245, 245);

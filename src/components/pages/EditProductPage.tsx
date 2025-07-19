@@ -1,7 +1,7 @@
 import { useEffect, useState, type ChangeEvent } from "react";
 import type { Product } from "../../types/Product";
 import { useNavigate, useParams } from "react-router-dom";
-import styles from '../../less/edit_product.module.less'
+import s from '../../less/edit_product.module.less'
 import * as prodApi from '../../api/products'
 
 interface Props {
@@ -116,107 +116,103 @@ export default function EditProductPage(props: Props) {
     }
 
     return (
-        <div className={styles.component}>
+        <div className={s.component}>
             <h3>
                 {id ? 'edit product' : 'new product'}    
             </h3>
             
             <form onSubmit={handleSubmit}>
-                <label>
-                    <span>name</span>
-                    <input
-                        type="text"
-                        placeholder="name"
-                        name="name"
-                        onChange={handleInputChange}
-                        value={product?.name}
-                    />
-                </label>
-                
-                <label>
-                    <span>brand</span>    
-                    <input
-                        type="text"
-                        placeholder="brand"
-                        name="brand"
-                        onChange={handleInputChange}
-                        value={product?.brand}
-                    />
-                </label>
+                <div>
+                    <label>
+                        <span>name</span>
+                        <input
+                            type="text"
+                            name="name"
+                            onChange={handleInputChange}
+                            value={product?.name}
+                        />
+                    </label>
                     
-                <label>
-                    <span>description</span>
-                    <textarea
-                        placeholder="description"
-                        name="description"
-                        onChange={handleInputChange}
-                        value={product?.description}
-                        maxLength={10}
-                    />
-                </label>
-                
-                <label>
-                    <span>price</span>
-                    <input
-                        type="number"
-                        placeholder="price"
-                        name="price"
-                        onChange={handleInputChange}
-                        value={product?.price}
-                    />
-                </label>
-                
-                <label>
-                    <span>category</span>
-                    <input
-                        type="text"
-                        placeholder="category"
-                        name="category"
-                        onChange={handleInputChange}
-                        value={product?.category}
-                    />
-                </label>
-                
-                <label>
-                    <span>quantity</span>
-                    <input
-                        type="number"
-                        placeholder="quantity"
-                        name="quantity"
-                        onChange={handleInputChange}
-                        value={product?.quantity}
-                    />
-                </label>
-                
-                <label>
-                    <span>date</span>
-                    <input
-                        type="date"
-                        placeholder="release date"
-                        name="releaseDate"
-                        onChange={handleInputChange}
-                    />
-                </label>
+                    <label>
+                        <span>brand</span>    
+                        <input
+                            type="text"
+                            name="brand"
+                            onChange={handleInputChange}
+                            value={product?.brand}
+                        />
+                    </label>
+                        
+                    <label>
+                        <span>description</span>
+                        <textarea
+                            name="description"
+                            onChange={handleInputChange}
+                            value={product?.description}
+                        />
+                    </label>
+                    
+                    <label>
+                        <span>price</span>
+                        <input
+                            type="number"
+                            name="price"
+                            onChange={handleInputChange}
+                            value={product?.price}
+                        />
+                    </label>
+                    
+                    <label>
+                        <span>category</span>
+                        <input
+                            type="text"
+                            name="category"
+                            onChange={handleInputChange}
+                            value={product?.category}
+                        />
+                    </label>
+                    
+                    <label>
+                        <span>quantity</span>
+                        <input
+                            type="number"
+                            name="quantity"
+                            onChange={handleInputChange}
+                            value={product?.quantity}
+                        />
+                    </label>
+                    
+                    <label>
+                        <span>date</span>
+                        <input
+                            type="date"
+                            name="releaseDate"
+                            onChange={handleInputChange}
+                        />
+                    </label>
 
-                <label>
-                    <span>available</span>
-                    <input
-                        type="checkbox"
-                        placeholder="available"
-                        name="available"
-                        onChange={handleCheckboxChange}
-                        checked={product?.available}
-                    />
-                </label>                
+                    <label>
+                        <span>available</span>
+                        <input
+                            type="checkbox"
+                            name="available"
+                            onChange={handleCheckboxChange}
+                            checked={product?.available}
+                        />
+                    </label>                
 
-                <label>
-                    <span>image</span>
-                    <input
-                        type="file"
-                        placeholder="image"
-                        onChange={handleImageChange}
-                    />
-                </label>                
+                    <label>
+                        <span>image</span>
+                        <div className={s.fileInputWrapper}>
+                            <span>choose file</span>
+                            
+                            <input
+                                type="file"
+                                onChange={handleImageChange}
+                            />
+                        </div>
+                    </label>                
+                </div>
                 
                 <input
                     type="submit"

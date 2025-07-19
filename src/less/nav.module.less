@@ -50,7 +50,7 @@
                 width: 100%;
                 margin: 0;
                 padding: 0;
-                padding-left: 6px;
+                padding-left: 32px !important;
                 border: 1px solid gray;
                 border-radius: 3px;
                 outline: none;
@@ -63,6 +63,14 @@
                     border: 1px solid black;
                     background-color: white;
                 }
+            }
+            
+            > img {
+                position: absolute;
+                left: 12px;
+                top: 12px;
+                width: 15px;
+                pointer-events: none;
             }
             
             > .suggestions {

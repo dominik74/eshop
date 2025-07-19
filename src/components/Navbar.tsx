@@ -126,6 +126,8 @@ export default function Navbar(props: Props) {
                             placeholder="Search products..."
                             ref={searchboxRef}
                         />
+                        
+                        <img src="search_icon.png" />
                     
                     {productResults && productResults.length > 0 &&
                         <ul

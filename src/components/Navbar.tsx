@@ -14,6 +14,8 @@ interface Props {
 }
 
 export default function Navbar(props: Props) {
+    const MIN_INPUT_LENGTH = 3;
+    
     const [productResults, setProductResults] = useState<Product[] | undefined>();
     const [selectedSuggestionIdx, setSelectedSuggestionIdx] = useState<number>(-1);
     
@@ -45,7 +47,7 @@ export default function Navbar(props: Props) {
     }
     
     async function searchboxKeyUp(event: React.KeyboardEvent<HTMLInputElement>) {
-        if (event.currentTarget.value.length <= 2) {
+        if (event.currentTarget.value.length < MIN_INPUT_LENGTH) {
             setProductResults([]);
             setSelectedSuggestionIdx(-1);
             return;
@@ -73,8 +75,7 @@ export default function Navbar(props: Props) {
             if (selectedSuggestionIdx >= 0) {
                 acceptSuggestion(productResults[selectedSuggestionIdx].id);
             } else {
-                navigate('/search?q=' + event.currentTarget.value);
-                setProductResults([]);
+                search();
             }
             
             return;
@@ -102,6 +103,11 @@ export default function Navbar(props: Props) {
         window.location.reload();
     }
     
+    function search() {
+        navigate('/search?q=' + props.searchValue);
+        setProductResults([]);
+    }
+    
     return (
         <div className={s.component}>
             <nav>
@@ -117,17 +123,24 @@ export default function Navbar(props: Props) {
                 </div>
                 
                 <div className={s.searchbox}>
-                        <input
-                            type="text"
-                            onKeyUp={searchboxKeyUp}
-                            onKeyDown={searchboxKeyDown}
-                            value={props.searchValue}
-                            onChange={(e) => props.setSearchValue(e.target.value)}
-                            placeholder="Search products..."
-                            ref={searchboxRef}
-                        />
-                        
-                        <img src="search_icon.png" />
+                    <input
+                        type="text"
+                        onKeyUp={searchboxKeyUp}
+                        onKeyDown={searchboxKeyDown}
+                        value={props.searchValue}
+                        onChange={(e) => props.setSearchValue(e.target.value)}
+                        placeholder="Search products..."
+                        ref={searchboxRef}
+                    />
+                    
+                    <img src="search_icon.png" />
+                    
+                    <button
+                        disabled={props.searchValue.length < MIN_INPUT_LENGTH}
+                        onClick={search}
+                    >
+                        &#10141;
+                    </button>
                     
                     {productResults && productResults.length > 0 &&
                         <ul

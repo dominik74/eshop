@@ -73,6 +73,28 @@
                 pointer-events: none;
             }
             
+            > button {
+                position: absolute;
+                right: 0;
+                top: 0;
+                bottom: 0;
+                margin: 7px;
+                padding: 0;
+                width: 30px;
+                min-width: 30px;
+                font-size: 16px;
+                border-radius: 3px;
+                background-color: dodgerblue;
+                color: white;
+                
+                &:disabled {
+                    border: 1px solid rgb(230, 230, 230);
+                    background-color: transparent;
+                    color: gray;
+                    cursor: default;
+                }
+            }
+            
             > .suggestions {
                 position: absolute;
                 top: 100%;

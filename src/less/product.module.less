@@ -1,21 +1,68 @@
 .component {
-    h2 {
-      text-decoration: underline;  
-    }
+    display: flex;
+    justify-content: center;
     
-    img {
-        width: 200px;
-    }
-    
-    .adminPanel {
-        background-color: lightgray;
-        padding: 5px;
-        width: 400px;
-        height: 150px;
-        border: 1px solid gray;
+    .panel {
+        border: 1px solid rgb(212, 212, 212);
+        box-shadow: 0 0 5px rgb(233, 233, 233);
+        border-radius: 3px;
+        width: 800px;
+        padding: 10px;
         
-        > h4 {
-            margin-top: 0;
+        h2 {
+          text-decoration: underline;  
+        }
+        
+        img {
+            width: 200px;
+        }
+        
+        > .subheading {
+            text-decoration: underline;
+        }
+        
+        > .stockItemProperties {
+            margin: 10px 0;
+            
+            p {
+                margin: 0;
+            }
+        }
+        
+        > .buttonbar {
+            display: flex;
+            justify-content: end;
+            align-items: center;
+            
+            .addToCartDiv {
+                display: flex;
+                flex-direction: column;
+                align-items: end;
+                gap: 5px;
+            }
+        }
+        
+        > .price {
+            font-size: 24px;
+            color: red;
+            display: flex;
+            justify-content: end;
+        }
+        
+        > .adminPanel {
+            background-color: lightgray;
+            padding: 5px;
+            width: 400px;
+            height: 150px;
+            border: 1px solid gray;
+            
+            > h4 {
+                margin-top: 0;
+            }
+            
+            > button {
+                margin-right: 5px;
+            }
         }
     }
 }

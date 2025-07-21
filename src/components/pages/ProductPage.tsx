@@ -132,39 +132,52 @@ export default function ProductPage(props: Props) {
     
     return (
         <div className={s.component}>
-            {imageUrl &&
-                <img src={imageUrl} />
-            }
-        
-            <h2>{product?.name}</h2>
-            <p>{product?.brand}</p>
-            <p>${product?.price}</p>
-            <p>{product?.description}</p>
-            <p>stock available: {product?.quantity}</p>
-            <p>category: {product?.category}</p>
-            <p>listed: {releaseDate}</p>
+            <div className={s.panel}>
+                {imageUrl &&
+                    <img src={imageUrl} />
+                }
             
-            {isProductInCart() ?
-                <>
-                    <button onClick={removeFromCart}>remove from cart</button>
-                    
-                    <input
-                        type="text"
-                        value={getOrderItemFromProduct()?.quantity}
-                        onChange={(e) => updateOrderItem(Number(e.currentTarget.value))}
-                    />
-                </>
-            :
-                <button onClick={addToCart}>add to cart</button>
-            }
-            
-            {props.user && props.user.admin &&
-                <div className={s.adminPanel}>
-                    <h4>admin</h4>
-                    <button onClick={updateProduct}>update</button>
-                    <button onClick={deleteProduct}>delete</button>
+                <h2>{product?.name}</h2>
+                <p>{product?.brand}</p>
+                
+                <h4 className={s.subheading}>description</h4>
+                <p>{product?.description}</p>
+                
+                <h4 className={s.subheading}>stock item properties</h4>
+                
+                <div className={s.stockItemProperties}>
+                    <p>stock available: {product?.quantity}</p>
+                    <p>category: {product?.category}</p>
+                    <p>listed: {releaseDate}</p>
                 </div>
-            }
+                
+                <p className={s.price}>${product?.price}</p>
+                
+                <div className={s.buttonbar}>
+                    {isProductInCart() ?
+                        <div className={s.addToCartDiv}>
+                                <button onClick={removeFromCart}>remove from cart</button>
+                                
+                                <input
+                                    type="text"
+                                    value={getOrderItemFromProduct()?.quantity}
+                                    onChange={(e) => updateOrderItem(Number(e.currentTarget.value))}
+                                />
+                        </div>
+                    :
+                        <button onClick={addToCart}>add to cart</button>
+                    }
+                </div>
+                    
+                
+                {props.user && props.user.admin &&
+                    <div className={s.adminPanel}>
+                        <h4>admin</h4>
+                        <button onClick={updateProduct}>update</button>
+                        <button onClick={deleteProduct}>delete</button>
+                    </div>
+                }
+            </div>
         </div>
     );
 }

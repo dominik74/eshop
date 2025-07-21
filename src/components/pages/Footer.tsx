@@ -5,7 +5,7 @@ export default function Footer() {
     return (
         <div className={s.component}>
             <div className={s.left}>
-                <Link to="/">about</Link>
+                <Link to="/about">about</Link>
                 <Link to="/tos">terms of service</Link>
             </div>
             

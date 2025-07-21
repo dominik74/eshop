@@ -21,6 +21,7 @@ import type { OrderItem } from '../types/OrderItem'
 import type { OrderItemDto } from '../types/dtos/OrderItemDto'
 import Footer from './pages/Footer'
 import TermsOfServicePage from './pages/TermsOfServicePage'
+import AboutPage from './pages/AboutPage'
 
 export default function RoutesWrapper() {
   const [errorMessage, setErrorMessage] = useState<string>('');
@@ -112,6 +113,7 @@ export default function RoutesWrapper() {
                 <Route path="/search" element={<SearchResultsPage setErrorMessage={setErrorMessage} orderItems={orderItems} setOrderItems={setOrderItems} />} />
                 <Route path="/cart" element={<CartPage orderItems={orderItems} setOrderItems={setOrderItems} user={user} setUser={setUser} setErrorMessage={setErrorMessage} />} />
                 <Route path="/tos" element={<TermsOfServicePage />} />
+                <Route path="/about" element={<AboutPage />} />
                 <Route path="/error" element={<ErrorPage />} />
                 <Route path="*" element={<PageNotFoundPage />} />
                 

@@ -1,0 +1,23 @@
+.component {
+    margin-top: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background-color: lightgray;
+    height: 40px;
+    padding: 10px;
+    
+    > .left {
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+    }
+    
+    > .left > a {
+        color: inherit;
+        
+        &:hover {
+            text-decoration: none;
+        }
+    }
+}

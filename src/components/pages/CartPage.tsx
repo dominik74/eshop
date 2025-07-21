@@ -96,15 +96,17 @@ export default function CartPage(props: Props) {
                 setOrderItems={props.setOrderItems}
             />
             
-            <button onClick={placeOrder} className={s.placeOrderBtn}>
-                {props.user ?
-                    'place order'
-                :
-                    'login to place order'
-                }
-                
-                &nbsp;(total: ${getTotalPrice()})
-            </button>
+            <div className={s.buttonbar}>
+                <button onClick={placeOrder}>
+                    {props.user ?
+                        'place order'
+                    :
+                        'login to place order'
+                    }
+                    
+                    &nbsp;(total: ${getTotalPrice()})
+                </button>
+            </div>
         </div>
     )
 }

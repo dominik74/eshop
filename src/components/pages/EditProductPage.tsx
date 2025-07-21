@@ -214,10 +214,12 @@ export default function EditProductPage(props: Props) {
                     </label>                
                 </div>
                 
-                <input
-                    type="submit"
-                    value="submit"
-                />
+                <div className={s.buttonbar}>
+                    <input
+                        type="submit"
+                        value="submit"
+                    />
+                </div>
             </form>
         </div>
     );

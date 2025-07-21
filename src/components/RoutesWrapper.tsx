@@ -19,12 +19,14 @@ import * as prodApi from '../api/products';
 import CartPage from './pages/CartPage'
 import type { OrderItem } from '../types/OrderItem'
 import type { OrderItemDto } from '../types/dtos/OrderItemDto'
+import Footer from './pages/Footer'
 
 export default function RoutesWrapper() {
   const [errorMessage, setErrorMessage] = useState<string>('');
   const [user, setUser] = useState<User | undefined>();
   const [orderItems, setOrderItems] = useState<OrderItem[]>([]);
   const [searchValue, setSearchValue] = useState<string>('');
+  const [isFooterPage, setIsFooterPage] = useState<boolean>(false);
   
   const navigate = useNavigate();
   
@@ -92,7 +94,7 @@ export default function RoutesWrapper() {
   
   return (
     <div className={s.component}>
-        <RedirectListener setErrorMessage={setErrorMessage} setSearchValue={setSearchValue} />
+        <RedirectListener setErrorMessage={setErrorMessage} setSearchValue={setSearchValue} setIsFooterPage={setIsFooterPage} />
         <Navbar setErrorMessage={setErrorMessage} searchValue={searchValue} setSearchValue={setSearchValue} user={user} />
         
         {errorMessage &&
@@ -101,30 +103,34 @@ export default function RoutesWrapper() {
         
         <div className={s.page}>
             <Routes>
-            {/* public */}
-            <Route path="/" element={<HomePage setErrorMessage={setErrorMessage} orderItems={orderItems} setOrderItems={setOrderItems} />} />
-            <Route path="/product/:id" element={<ProductPage setErrorMessage={setErrorMessage} user={user} orderItems={orderItems} setOrderItems={setOrderItems} />} />
-            <Route path="/login" element={<AuthPage setErrorMessage={setErrorMessage} setUser={setUser} isLoginPage={true} />} />
-            <Route path="/register" element={<AuthPage setErrorMessage={setErrorMessage} setUser={setUser} isLoginPage={false} />} />
-            <Route path="/search" element={<SearchResultsPage setErrorMessage={setErrorMessage} orderItems={orderItems} setOrderItems={setOrderItems} />} />
-            <Route path="/cart" element={<CartPage orderItems={orderItems} setOrderItems={setOrderItems} user={user} setUser={setUser} setErrorMessage={setErrorMessage} />} />
-            <Route path="/error" element={<ErrorPage />} />
-            <Route path="*" element={<PageNotFoundPage />} />
-            
-            {/* protected */}
-            <Route path="/update/:id" element={
-                <ProtectedRoute user={user}>
-                <EditProductPage setErrorMessage={setErrorMessage} />
-                </ProtectedRoute>
-            } />
-            
-            <Route path="/add_product" element={
-                <ProtectedRoute user={user}>
-                <EditProductPage setErrorMessage={setErrorMessage} />
-                </ProtectedRoute>
-            } />
+                {/* public */}
+                <Route path="/" element={<HomePage setErrorMessage={setErrorMessage} orderItems={orderItems} setOrderItems={setOrderItems} />} />
+                <Route path="/product/:id" element={<ProductPage setErrorMessage={setErrorMessage} user={user} orderItems={orderItems} setOrderItems={setOrderItems} />} />
+                <Route path="/login" element={<AuthPage setErrorMessage={setErrorMessage} setUser={setUser} isLoginPage={true} />} />
+                <Route path="/register" element={<AuthPage setErrorMessage={setErrorMessage} setUser={setUser} isLoginPage={false} />} />
+                <Route path="/search" element={<SearchResultsPage setErrorMessage={setErrorMessage} orderItems={orderItems} setOrderItems={setOrderItems} />} />
+                <Route path="/cart" element={<CartPage orderItems={orderItems} setOrderItems={setOrderItems} user={user} setUser={setUser} setErrorMessage={setErrorMessage} />} />
+                <Route path="/error" element={<ErrorPage />} />
+                <Route path="*" element={<PageNotFoundPage />} />
+                
+                {/* protected */}
+                <Route path="/update/:id" element={
+                    <ProtectedRoute user={user}>
+                        <EditProductPage setErrorMessage={setErrorMessage} />
+                    </ProtectedRoute>
+                } />
+                
+                <Route path="/add_product" element={
+                    <ProtectedRoute user={user}>
+                        <EditProductPage setErrorMessage={setErrorMessage} />
+                    </ProtectedRoute>
+                } />
             </Routes>
-        </div>
+            
+            {isFooterPage &&
+                <Footer />
+            }
+        </div>        
     </div>
   )
 }

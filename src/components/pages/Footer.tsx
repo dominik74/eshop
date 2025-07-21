@@ -6,7 +6,7 @@ export default function Footer() {
         <div className={s.component}>
             <div className={s.left}>
                 <Link to="/">about</Link>
-                <Link to="/cart">terms of service</Link>
+                <Link to="/tos">terms of service</Link>
             </div>
             
             <div className={s.right}>

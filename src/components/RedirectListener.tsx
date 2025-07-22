@@ -21,6 +21,8 @@ export default function RedirectListener(props: Props) {
             location.pathname === '/login' ||
             location.pathname === '/register'
         ));
+        
+        window.scrollTo({ top: 0, behavior: "auto" });
     }, [location.pathname]);
     
     return null;

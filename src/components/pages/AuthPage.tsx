@@ -104,7 +104,7 @@ export default function AuthPage(props: Props) {
           }
           
           <div className={s.buttonbar}>
-            <button onClick={switchAuthMethod}>{props.isLoginPage ? "register..." : "login..."}</button>
+            <button onClick={switchAuthMethod} tabIndex={1}>{props.isLoginPage ? "register..." : "login..."}</button>
             <input type="submit" value={props.isLoginPage ? "login" : "register"} />
           </div>
         </form>

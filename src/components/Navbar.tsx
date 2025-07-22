@@ -11,6 +11,7 @@ interface Props {
     searchValue: string;
     setSearchValue: React.Dispatch<React.SetStateAction<string>>;
     user: User | undefined;
+    setIsSidebarVisible: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
 export default function Navbar(props: Props) {
@@ -121,6 +122,13 @@ export default function Navbar(props: Props) {
                     <Link to="/login">login</Link>
                     <Link to="/cart">cart</Link>
                 </div>
+                
+                <button
+                    className={s.menuBtn}
+                    onClick={() => props.setIsSidebarVisible(true)}
+                >
+                    <img src="hamburger_menu.png" />
+                </button>
                 
                 <div className={s.searchbox}>
                     <input

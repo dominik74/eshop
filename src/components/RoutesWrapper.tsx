@@ -22,6 +22,7 @@ import type { OrderItemDto } from '../types/dtos/OrderItemDto'
 import Footer from './pages/Footer'
 import TermsOfServicePage from './pages/TermsOfServicePage'
 import AboutPage from './pages/AboutPage'
+import Sidebar from './pages/Sidebar'
 
 export default function RoutesWrapper() {
   const [errorMessage, setErrorMessage] = useState<string>('');
@@ -29,6 +30,7 @@ export default function RoutesWrapper() {
   const [orderItems, setOrderItems] = useState<OrderItem[]>([]);
   const [searchValue, setSearchValue] = useState<string>('');
   const [isFooterPage, setIsFooterPage] = useState<boolean>(false);
+  const [isSidebarVisible, setIsSidebarVisible] = useState<boolean>(false);
   
   const navigate = useNavigate();
   
@@ -97,10 +99,14 @@ export default function RoutesWrapper() {
   return (
     <div className={s.component}>
         <RedirectListener setErrorMessage={setErrorMessage} setSearchValue={setSearchValue} setIsFooterPage={setIsFooterPage} />
-        <Navbar setErrorMessage={setErrorMessage} searchValue={searchValue} setSearchValue={setSearchValue} user={user} />
+        <Navbar setErrorMessage={setErrorMessage} searchValue={searchValue} setSearchValue={setSearchValue} user={user} setIsSidebarVisible={setIsSidebarVisible} />
         
         {errorMessage &&
             <ErrorBar errorMessage={errorMessage} />
+        }
+        
+        {isSidebarVisible &&
+            <Sidebar setIsSidebarVisible={setIsSidebarVisible} user={user} />
         }
         
         <div className={s.page}>

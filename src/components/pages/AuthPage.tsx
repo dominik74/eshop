@@ -71,6 +71,7 @@ export default function AuthPage(props: Props) {
         localStorage.setItem(LOCAL_STORAGE_AUTH_TOKEN, jwtResp.token);
         
         props.setErrorMessage('');
+        navigate('/');
       } catch (e) {
         if (e instanceof Error) {
           props.setErrorMessage(e.message);
